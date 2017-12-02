@@ -1,0 +1,21 @@
+---
+- name: Install Packages
+  xbps:
+    pkg: grafana
+    state: present
+
+- name: Configure Firewall
+  template:
+    src: grafana.rules.j2
+    dest: /etc/iptables.d/grafana.rules
+    owner: root
+    group: root
+    mode: 0640
+  notify:
+    - iptables
+
+- name: Enable Grafana
+  runit:
+    name: grafana
+    enabled: true
+    state: started

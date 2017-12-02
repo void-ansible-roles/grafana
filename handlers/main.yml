@@ -1,0 +1,5 @@
+---
+- name: grafana
+  runit:
+    name: grafana
+    state: restarted
