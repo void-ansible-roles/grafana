@@ -13,6 +13,7 @@
     mode: 0640
   notify:
     - iptables
+  when: grafana.public_bind | default(false)
 
 - name: Enable Grafana
   runit:
