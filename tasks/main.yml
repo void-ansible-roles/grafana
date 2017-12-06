@@ -20,3 +20,26 @@
     name: grafana
     enabled: true
     state: started
+
+- name: Configure nginx base-site
+  include_role:
+    name: nginx
+    tasks_from: base-site
+  vars:
+    - site:
+        name: grafana
+        urls: "{{ grafana.urls }}"
+        use_ssl: "{{ void_aquire_certs }}"
+        static_root: false
+        ssl_certificate_path: "{{ grafana.ssl_certificate_path }}"
+        ssl_key_path: "{{ grafana.ssl_key_path }}"
+
+- name: Install location file
+  copy:
+    src: grafana_root.conf
+    dest: /etc/nginx/locations.d/{{ grafana.urls | first }}/
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - nginx
